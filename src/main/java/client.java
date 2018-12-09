@@ -1,9 +1,8 @@
-import entities.Wifi;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class client {
@@ -34,28 +33,26 @@ public class client {
 
             }
 
-            String os = System.getProperty("os.name").toLowerCase();
-
-            List<Wifi> wifiList = new ArrayList<Wifi>();
-            if (os.contains("windows"))
-                wifiList = GlobalUtils.scanAPSWindows();
+            WifiScanner wifiScanner=new WifiScanner();
+            List<WifiResult> wifiList  = wifiScanner.run();
 
             System.out.println("FOUND " + wifiList.size() + " APS");
 
             if(learning){
                 JSONObject jsonObject= GlobalUtils.getJSON_V1(wifiList,LOCATION,GROUP,USER);
-                String response= CommunicationUtils.callAPI(SERVER,"learn",jsonObject);
+                String response= CommunicationUtils.callAPI(SERVER,LEARNING,jsonObject);
                 System.out.println(new JSONObject(response).toString(1));
             }else{
                 JSONObject jsonObject= GlobalUtils.getJSON_V1(wifiList,LOCATION,GROUP,USER);
-                String response= CommunicationUtils.callAPI(SERVER,"track",jsonObject);
+                String response= CommunicationUtils.callAPI(SERVER,TRACKING,jsonObject);
                 System.out.println(new JSONObject(response).toString(1));
-
             }
 
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
