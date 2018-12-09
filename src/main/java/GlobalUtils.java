@@ -10,7 +10,7 @@ import java.util.TimeZone;
 
 class GlobalUtils {
 
-    static long getCurrentTimestamp() {
+    private static long getCurrentTimestamp() {
         Calendar cal = Calendar.getInstance();
         cal.setTimeZone(TimeZone.getTimeZone("UTC"));
         return cal.getTime().getTime();
